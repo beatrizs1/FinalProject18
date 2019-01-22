@@ -13,6 +13,9 @@ def extra(string):
     sys.stdout.flush()
     time.sleep(.03)
 
+valid_options=['1','2','3','4']
+yesorno=['yes', 'y', 'no', 'n']
+
 print(f"-"*20)
 titleprint("𝕖𝕤𝕔𝕒𝕡𝕖 𝕥𝕙𝕖 𝕛𝕒𝕚𝕝 𝕔𝕖𝕝𝕝\n")
 print(f"-"*20)
@@ -22,18 +25,20 @@ name=input(f"\nEnter your name.\n☛  ").title()
 response=input(f"Hello, {name}... Have you played this before?\n☛  ").lower()
 
 while response==response:
-    if response != "yes" and response!="y" and response!="no" and response!="n":
+    while response not in yesorno:
         response=input(f"Please enter yes or no.\n☛  ").lower()
-    elif response=="yes" or response=="y":
-        extra(f"Great! So you know the gist of it. \n")
+    if response=="yes" or response=="y":
+        easyhard='hard'
+        extra(f"Great! Welcome back! So you know the gist of it. \n")
         time.sleep(3)
         break
     elif response=="no" or response=="n":
-      extra(f"That's fine. Here's the basic idea:")
-      time.sleep(1)
-      extra(f"Throughout this game you will observe your surroundings and make decisions in order to successfully escape and win the game. Making the wrong decision will cause you to lose health. If you run out of health, you lose! (But don't worry, this is a video game, so real-life-you will be fine).\n")
-      time.sleep(6)
-      break
+        easyhard='easy'
+        extra(f"That's fine. Here's the basic idea:")
+        time.sleep(1)
+        extra(f"\nThroughout this game you will observe your surroundings and make decisions in order to successfully escape and win the game. Making the wrong decision will cause you to lose health. If you run out of health, you lose! (But don't worry, this is a video game, so real-life-you will be fine).\n")
+        time.sleep(2)
+        break
 
 
 extra(f"Here are the basic rules for this game:\n")
@@ -54,21 +59,47 @@ def dots(string):
     time.sleep(1)
 
 
-statistics= {
-	'hp': 100,
-	'mentality': 100
-}
+class mode:
+  def __init__(self, hp, mentality):
+    self.hp = hp
+    self.mental = mentality
+  def hurt(self, health, mentality):
+    self.hp -= health
+    self.mental -= mentality
+    print(f"""Your stats:
+    - HP: {self.hp}
+    - Mentality: {self.mental}\n""")
+
+easy = mode(100, 100)
+hard = mode(70, 70)
+
+
+
+#statistics= {
+#	'hp': 100,
+#	'mentality': 100
+#}
 
 def die():
-  if statistics['hp']==0:
-    extra("""You died!
-    GAME OVER""")
-  elif statistics['mentality']==0:
-    extra("""You have finally reached the point of a mental breakdown. You cannot possibly go on. Your life is over, and you know it. You rot in your cell forever, with only the voices in your head to comfort you.
-    GAME OVER""")
-    sys.exit()
+    if easyhard=='easy':
+        if easy.hp <= 0:
+            extra("""You died!
+            GAME OVER\n\n""")
+            sys.exit()
+        elif easy.mental<=0:
+            extra("""You have finally reached the point of a mental breakdown. You cannot possibly go on. Your life is over, and you know it. You rot in your cell forever, with only the voices in your head to comfort you.
+            GAME OVER\n\n""")
+            sys.exit()
+    if easyhard=='hard':
+        if hard.hp <= 0:
+            extra("""You died!
+            GAME OVER\n\n""")
+            sys.exit()
+        elif hard.mental<=0:
+            extra("""You have finally reached the point of a mental breakdown. You cannot possibly go on. Your life is over, and you know it. You rot in your cell forever, with only the voices in your head to comfort you.
+            GAME OVER\n\n""")
+            sys.exit()
 
-valid_options=['1','2','3','4']
 
 def dig():
   extra("\nYou pick up the spoon. You settle in the corner and start digging at the cement.\n")
@@ -79,54 +110,59 @@ def dig():
   dots('.')
   extra("You realize this is hopeless and start to cry.\n")
   extra("You lost 10 mental health points!\n")
-  statistics['mentality']-=10
-  print(statistics)
-  die()
+  if easyhard=='hard':
+      hard.hurt(0, 10)
+      die()
+  elif easyhard=='easy':
+      easy.hurt(0, 10)
+      die()
 
 
 def soap():
   extra("\nYou pick up the soap. You have the genius plan of lathering yourself in soap to slip through the bars. However all does not go as expected. The soapy mixture gets all over the cement cell floor and you slip and bang your head on the cell bars. You get brain damage and die before the guards can even catch you escaping. What a disappointment you are!\n")
-  statistics['hp'] -=100
-  print(statistics)
-  die()
+  extra("GAME OVER\n\n")
+  sys.exit()
 
 
 def inmates():
   extra("\nYou ask your next door cell neighbor to help you and instead of being a kind, loyal neighbor they spit all the way from across the room and hit you straight in the eye.\n This made you very sad. You lost 10 mental health points.\n")
-  statistics['mentality']-=10
-  print(statistics)
-  die()
+  if easyhard=='hard':
+      hard.hurt(0, 10)
+      die()
+  elif easyhard=='easy':
+      easy.hurt(0, 10)
+      die()
 
 
 def cane():
-  help=input("""\nYou take the cane lying against your cell and you use it to knock the coat off of it's hook. As the coat drops you hear keys jingling inside the coat pocket. You decide to use the cane to fish out the keys.
+  extra("""\nYou take the cane lying against your cell and you use it to knock the coat off of it's hook. As the coat drops you hear keys jingling inside the coat pocket. You decide to use the cane to fish out the keys.
 
-  "Hey!" It's your next door neighbor. "If you get me out of here, we can both escape together. If not, I'll just tell the guards one of their prisoners got out!"
+  "Hey!" It's your next door neighbor. "If you get me out of here, we can both escape together. If not, I'll just tell the guards one of their prisoners got out!\n""")
 
-  Do you help the guy?
-  ☛  """)
+  help=input("\nDo you help the guy?\n☛  ").lower()
+
+  while help not in yesorno:
+      help = input("Please enter yes or no.\n☛  ")
+
   if help == 'yes' or help=='y':
     extra("\nYou unlock your cell and the guy thanks you but promptly runs the other direction. You are filled with happiness as you watch him run off into freedom!\nYou gain 20 mental health points.\n")
-    statistics['mentality']+=20
-    print(statistics)
+    if easyhard=='hard':
+      hard.hurt(0, -20)
+      die()
+    elif easyhard=='easy':
+      easy.hurt(0, -20)
+      die()
+
   elif help =='no' or help == 'n':
     extra("\nAs you run past the other guy's cell, the guy begins to scream: 'You are never going to leave now! The moment the guard comes back I am gonna let them know you left!'\nYou become scared of getting caught and lose 20 mental health points.\n")
-    statistics['mentality']-=20
-    print(statistics)
-    die()
+    if easyhard=='hard':
+      hard.hurt(0, 20)
+      die()
+  elif easyhard=='easy':
+      easy.hurt(0, 20)
+      die()
 
 
-def cell():
-  extra("You look around. You find a spoon under your bed and a bar of soap on the sink. To the left and right of your cell are other inmates that you think may be able to help in your escape.\n")
-  choice1=input("\nDo you want to dig your way out?(1) Do you want to use the soap to slide through the bars?(2) Or do you want to recruit the other prisoners in your escape?(3)\n☛  ")
-  while choice1 not in valid_options:
-    choice1=int(input("Please type 1, 2, or 3.\n☛  "))
-  if choice1=='1':
-    dig()
-  elif choice1=='2':
-    soap()
-  elif choice1=='3':
-    inmates()
 
 def papers():
   extra("\nYou pick up a piece of paper.\n")
@@ -139,45 +175,107 @@ def papers():
   |   Officer Santos - ext. 314       |
   |   Officer Zajac - ext. 702        |
   |   Officer Tears - ext. 123        |
+  |                                   |
+  |   code: 2020                      |
   |___________________________________|
 
   """)
 
 def donuts():
-  extra("\nOn the desk you find a pack of duck donuts. The smell is so strong and you become very hungry. You open the donut box and find there is one half eaten donut. It still looks delicious though.\n")
+  extra("\nOn the desk you find a pack of Duck Donuts. The smell is quite strong and you become very hungry. You open the donut box and find there is one half eaten donut. It still looks delicious, though.\n")
 
-  donutdecision = input("\nDo you wish to take a bite into the half-eaten donut? Yes or no?\n☛  ")
+  donutdecision = input("\nDo you wish to take a bite into the half-eaten donut?\n☛  ").lower()
+
+  while donutdecision not in yesorno:
+      donutdecision = input("Please enter yes or no.\n☛  ").lower()
 
   if donutdecision == 'yes' or donutdecision =='y':
-    extra("\nYou bit into a donut that was infested with bacteria from a sick officer. You now have the flu.\nYour hp points have gone down by half!\n")
-    statistics['hp'] = statistics['hp']/2
-    print(statistics)
-    die()
+    extra("\nYou bit into a donut that was infested with bacteria from a sick officer. You now have the flu.\nYour hp points have gone down by 50!\n")
+    if easyhard=='hard':
+      hard.hurt(50, 0)
+      die()
+    elif easyhard=='easy':
+      easy.hurt(50, 0)
+      die()
   if donutdecision == 'no' or donutdecision=='n':
     extra("\nYou close the box with disappointment.\nYour mentality points have decreased by 10! :( \n")
-    statistics['mentality'] -= 10
-    print(statistics)
-    die()
+    if easyhard=='hard':
+      hard.hurt(0, 10)
+      die()
+    elif easyhard=='easy':
+      easy.hurt(0, 10)
+      die()
 
 
 def photos():
   extra("\nOn the walls you see a wide range of photos all of the same family over and over. There is a wife with two twin girls and a boy. All five of them have huge smiles and appear to be genuinely laughing. Looking at this happy family you find yourself reminiscing to your own family. Because you are upset, you lose 50 mental health points.\n")
-  statistics['mentality']-=50
-  print(statistics)
-  die()
+  if easyhard=='hard':
+      hard.hurt(0, 50)
+      die()
+  elif easyhard=='easy':
+      easy.hurt(0, 50)
+      die()
+
 
 def hallway():
-  extra("\nYou leave the office and realize that you quickly need to make a run for it. You're seconds away from freedom!!! You can choose to go straight, left or right...\n")
+  extra("""\nYou leave the office and realize that you quickly need to make a run for it. You're seconds away from freedom!!! You can choose to go straight(1), left(2) or right(3)...""")
   halldecision = input("\nWhich direction do you want to go?\n☛  ")
-  if halldecision == 'right':
-    extra("You sprint at top speed to the right. You run and you run until you arrive at another corner. You think you hear something...\n")
-  elif halldecision == 'left':
-    extra("unfinished\n")
-  elif halldecision == 'straight':
-    extra("unfinished\n")
+  while halldecision not in valid_options:
+    halldecision = input("Please type 1, 2, 3, or 4.\n☛  ")
+  if halldecision == '3':
+    extra("You sprint at top speed to the right. You run and you run until you arrive at another corner. You think you hear something, but you keep running. A guard catches up to you. He grabs you by the arm and throws you back into the jail cell. You failed.")
+    extra("GAME OVER\n\n")
+    sys.exit()
+  elif halldecision == '2':
+    extra("You sprint at top speed to the left. You trip and scrape your knee, which is more painful than you'd imagine it to be. It's also a little embarassing.\n")
+    extra("You lose 20 hp and 10 mental health points!\n")
+    if easyhard=='hard':
+      hard.hurt(20, 10)
+      die()
+    elif easyhard=='easy':
+      easy.hurt(20, 10)
+      die()
+    extra("You come to a corner and you do not hear anyone behind you so you take a moment to breathe.")
+    halldecision2 = input("You think you hear something on your left but you aren't sure. Maybe it's from your right side? Where do you go? Left(1)? Or right(2)?\n☛  ")
+    while halldecision2 not in valid_options:
+        halldecision2 = input("Please type 1 or 2. \n☛  ")
+    if halldecision2 == '1':
+      extra("Unfortunately your hearing is horrible and you run straight into the guard. He grabs you by the arm and throws you back into the jail cell. You failed.")
+      extra("GAME OVER\n\n")
+      sys.exit()
+    elif halldecision2 == '2':
+      extra("You run and the noise you heard before is becoming more faint as you keep running down the hall. You see the exit but there's a lock that requires a four number code.\n")
+      code_attempt = input("Think back to all the clues you looked at in previous rooms. What do you think is the code?\n☛  ")
+      if code_attempt == '2020':
+        extra("The light on the lock turns green and you hear a click as the door unlocks. CONGRATS! You run outside, finally making your escape.")
+        extra("""THE END ✩""")
+        sys.exit()
+      else:
+        extra("Boo hoo! Judging by the loud buzzing noise, looks like you were wrong! The guards caught up to you and threw you back in the jail cell.")
+        extra("GAME OVER\n\n")
+        sys.exit()
+  elif halldecision == '1':
+      extra("You decide to continue straight and start sprinting. You trip and scrape your knee, which is more painful than you'd imagine it to be. It's also a little embarassing.\n")
+      extra("You lose 20 hp and 10 mental health points!\n")
+      if easyhard=='hard':
+        hard.hurt(20, 10)
+        die()
+      elif easyhard=='easy':
+        easy.hurt(20, 10)
+        die()
+      extra("\nYou continue on and see the exit! But there's a lock that requires a four number code.\n")
+      code_attempt = input("Think back to all the clues you looked at in previous rooms. What do you think is the code?\n☛  ")
+      if code_attempt == '2020':
+        extra("The light on the lock turns green and you hear a click as the door unlocks. CONGRATS! You run outside, finally making your escape.")
+        extra("""THE END ✩""")
+        sys.exit()
+      else:
+        extra("Boo hoo! Judging by the loud buzzing noise, looks like you were wrong! The guards caught up to you and threw you back in the jail cell.")
+        extra("GAME OVER\n\n")
+        sys.exit()
 
 def office():
-  extra(""""\nYou make a run for the office door at the end of the hallway. You don't hear anyone so you unlock the door and enter, closing it behind you again.
+  extra("""\nYou make a run for the office door at the end of the hallway. You don't hear anyone so you unlock the door and enter, closing it behind you again.
 
   You look around the room and you see an old rotary phone in the corner right above a desk. There are photos on the wall and a box of donuts on the desk on top of some papers.\n""")
 
@@ -196,11 +294,14 @@ def office():
 
 
   extra("""\nAs you begin to leave, the phone from the corner of the room starts to ring loudly.\n""")
-  phone_ring = input("Do you wish to answer the phone call? ☎ Hmmm... it seems rather important.\n☛  ")
+  phone_ring = input("Do you wish to answer the phone call? ☎ \n☛  ").lower()
+
+  while phone_ring not in yesorno:
+      phone_ring = input("Please enter yes or no.\n☛  ").lower()
 
   if phone_ring =='no' or phone_ring=='n':
     extra("\nUnfortunately since you did not answer the phone, Officer Richard II suspected suspicious activity since Officer Tears always picks up his phone.\n")
-    extra("GAME OVER")
+    extra("GAME OVER\n\n")
     sys.exit()
 
   elif phone_ring == 'yes' or phone_ring == 'y':
@@ -240,19 +341,19 @@ def office():
     D) three kids\n☛  """).upper()
 
     if question_2input == 'D' or question_2input == 'D)':
-      extra("\nOkay, sorry about that Officer, I just thought you were the person trying to escape. I will talk to you later, bye!\n")
+      extra("\n'Okay, sorry about that Officer, I just thought you were the person trying to escape. I will talk to you later, bye!'\n")
+      hallway()
     else:
       extra("""Suddenly, the person hangs up. Within a few seconds, Officer Richard II comes into the office and catches you, shaking his head.
       'It's like you didn't even try...'\n""")
-      extra("GAME OVER")
+      extra("GAME OVER\n\n")
       sys.exit()
 
   else:
     extra("""Suddenly, the person hangs up. Within a few seconds, Officer Richard II comes into the office and catches you, shaking his head.
     "It's like you didn't even try..."\n""")
-    extra("GAME OVER")
+    extra("GAME OVER\n\n")
     sys.exit()
-  #hallway()
 
 
 
@@ -280,6 +381,9 @@ extra("You find yourself in a dark cold jail cell after being wrongly accused of
 
 daynight = input("\nWill you start your escape now or wait until night time?\n☛  ").lower()
 
+while daynight != 'now' and daynight!= 'wait':
+    daynight=input("Please type in 'now' or 'wait'.\n☛  ").lower()
+
 if daynight == "now":
   extra("\nYou look around. You find a spoon under your bed and a bar of soap on the sink. To the left and right of your cell are other inmates that you think may be able to help in your escape.\n")
   choice1=input("\nDo you want to dig your way out?(1) Do you want to use the soap to slide through the bars?(2) Or do you want to recruit the other prisoners in your escape?(3)\n☛  ")
@@ -294,7 +398,9 @@ if daynight == "now":
   extra("""
     One of the guards noticed you were trying to escape and caught you!
 
-    GAME OVER""")
+    GAME OVER
+
+    """)
   sys.exit()
 if daynight == "wait":
   night()
