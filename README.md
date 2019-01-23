@@ -1,9 +1,6 @@
 # Intro to Programming Final Project - Fall 2018
 
-* Project details are in description.md
-* Replace the content of this file with your own info about your project before the due date
-* Don't forget to fill out the [Project Proposal Form](https://airtable.com/shrrdA41unoBvi6Ki) before break.
+For our final project, we (Beatriz Santos and Nicole Zajac) designed a text-based adventure game. The theme is "escape the jail cell", meaning that players will read the descriptions and are asked to make decisions in order to hopefully escape and win the game. Throughout the game there are many possibilities to gain or lose health, which means players have to think carefully and be mindful of their health in order not to lose!
+We used many functions that we have learned about in this class, such as while loops, if statements, and inputs. However, we also pushed ourselves to learn new things during the creation of this project. By reading through the website stackoverflow.com, along with speaking to our peers, we discovered and understood things such as the system and time modules to use in our game.
 
-## Setting Up Your Repo
-
-On the GitHub page for this repository, click the "Fork" button. This will create your own copy of this repository, linked to my original. Use the same cloning method we used before to clone the repository to your PythonAnywhere account
+Slideshow Presentation > https://docs.google.com/presentation/d/1FU463GuaVEshx1eFxhQMnR_6IF3rMik88dUNJUw-gRQ/edit?usp=sharing
